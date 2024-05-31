@@ -1,15 +1,13 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using TangyWeb.Data;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);  // Компоновщик приложения
 
-// Add services to the container.
-builder.Services.AddRazorPages();
+// Добавление сервисов в контейнер
+builder.Services.AddRazorPages();  
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 
-var app = builder.Build();
+var app = builder.Build();  // Построение
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -17,6 +15,10 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
+}
+else
+{
+    app.UseDeveloperExceptionPage();
 }
 
 app.UseHttpsRedirection();

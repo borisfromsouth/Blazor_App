@@ -1,9 +1,11 @@
-﻿<Router AppAssembly="@typeof(App).Assembly">
+﻿<Router AppAssembly="@typeof(App).Assembly">  <!-- Маршрутизация -->
     <Found Context="routeData">
+        <!-- Если нашлось то показываем основной дизайнер страницы с содержимым и фокус тавим на прежде выбранный пункт меню -->
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
     </Found>
     <NotFound>
+        <!-- Если не нашлось то выдаем страницу ошибки с сообщением -->
         <PageTitle>Not found</PageTitle>
         <LayoutView Layout="@typeof(MainLayout)">
             <p role="alert">Sorry, there's nothing at this address.</p>

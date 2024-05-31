@@ -1,6 +1,6 @@
 namespace TangyWeb.Data
 {
-    public class WeatherForecast
+    public class WeatherForecast  // класс-шаблон для передачи данных по прогнозу погоды
     {
         public DateTime Date { get; set; }
 
