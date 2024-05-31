@@ -1,4 +1,4 @@
-using TangyWeb.Data;
+using TangyWeb_Server.Data;
 
 var builder = WebApplication.CreateBuilder(args);  // Компоновщик приложения
 

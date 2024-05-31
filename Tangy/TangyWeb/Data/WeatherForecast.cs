@@ -1,4 +1,4 @@
-namespace TangyWeb.Data
+namespace TangyWeb_Server.Data
 {
     public class WeatherForecast  // класс-шаблон для передачи данных по прогнозу погоды
     {
