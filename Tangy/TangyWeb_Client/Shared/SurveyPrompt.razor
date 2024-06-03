@@ -1,4 +1,5 @@
-﻿<div class="alert alert-secondary mt-4">
+﻿<!-- Дизайн и код блока опросника -->
+<div class="alert alert-secondary mt-4">
     <span class="oi oi-pencil me-2" aria-hidden="true"></span>
     <strong>@Title</strong>
 
@@ -9,8 +10,9 @@
     and tell us what you think.
 </div>
 
-@code {
-    // Demonstrates how a parent component can supply parameters
+@code 
+{
+    // Показывает как родительский компонент может предоставлять параметры
     [Parameter]
     public string? Title { get; set; }
 }
