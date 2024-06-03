@@ -2,7 +2,30 @@
 
 <h1>BindProp</h1>
 
+<h3>Product №@product.Id  </h3>
+Name: @product.Name<br />
+Active: @product.IsActive<br />
+Price: @product.Price<br />
+This product is: @(product.IsActive?"IsActive":"InActive" // Кусок кода внутри переменной, синатксис как у if-конструкции) 
+<br />
+<br />
+
+Activate
+<input type="checkbox" @bind="@product.IsActive" @bind:event="oninput">
+<br />
+<!-- Пример двухстороннего биндинга: используем поле для ввода -->
+<!-- type - тип вводимого значения; bind - связанное значение, свойство может изменятся прямо из интерфейса, изменится после перемещения фокуса с текстбокса-->
+<!-- bind:event="oninput" задает механизм срабатывания биндинга, в данном случае по вводу: ввели сразу поменялось -->
+Price: <input type="number" @bind="@product.Price"  @bind:event="oninput"/>
+
 @code 
 {
-
+    // Код отрабатывет до ренднринга интерфейса
+    Tangy_Models.LearnBlazorModels.Demo_Product product = new()
+    {
+        Id = 1,
+        Name = "Rose Candle",
+        IsActive = true,
+        Price = 10.99
+    };
 }
