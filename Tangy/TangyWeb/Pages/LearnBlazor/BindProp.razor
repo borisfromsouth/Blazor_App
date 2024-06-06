@@ -3,29 +3,71 @@
 <h1>BindProp</h1>
 
 <h3>Product №@product.Id  </h3>
-Name: @product.Name<br />
+Name: @product.Name<br />  <!-- Односторонний биндинг -->
 Active: @product.IsActive<br />
 Price: @product.Price<br />
-This product is: @(product.IsActive?"IsActive":"InActive" // Кусок кода внутри переменной, синатксис как у if-конструкции) 
+This product is: @(product.IsActive ? "IsActive" : "InActive" /* Кусок кода внутри переменной, синатксис как у if-конструкции*/)
 <br />
+Property selected: @product.Price
 <br />
+@if (!String.IsNullOrEmpty(selectedrop))
+{
+    <p>Property Value : @product.ProductProperties.FirstOrDefault(i => i.Key == selectedrop)</p>
+}
 
-Activate
-<input type="checkbox" @bind="@product.IsActive" @bind:event="oninput">
+
+Activate №1
+<input type="checkbox" @bind="@product.IsActive" /> <!-- Для чекбокса можно без события -->
+<br />
+Activate №2
+<input type="checkbox" @bind="@product.IsActive" @bind:event="oninput" />
+<br />
+Activate №3
+<!-- bind использует checked что-то вроде компонента, поэтому используем bind-value -->
+<input type="checkbox" @bind-value="@product.IsActive" checked="@(product.IsActive ? "checked" : null)" />
 <br />
 <!-- Пример двухстороннего биндинга: используем поле для ввода -->
 <!-- type - тип вводимого значения; bind - связанное значение, свойство может изменятся прямо из интерфейса, изменится после перемещения фокуса с текстбокса-->
 <!-- bind:event="oninput" задает механизм срабатывания биндинга, в данном случае по вводу: ввели сразу поменялось -->
-Price: <input type="number" @bind="@product.Price"  @bind:event="oninput"/>
+Price:
+<input type="number" @bind="@product.Price" @bind:event="oninput" />
+<br />
+
+
+
+Product Properties:
+<select @bind="selectedrop"> <!-- связывание с переменной -->
+    <!-- ручной вариант -->
+    <option value=@product.ProductProperties.FirstOrDefault(i => i.Id == 1)?.Key>@product.ProductProperties.FirstOrDefault(i => i.Id == 1)?.Key</option>
+    <option value=@product.ProductProperties.FirstOrDefault(i => i.Id == 2)?.Key>@product.ProductProperties.FirstOrDefault(i => i.Id == 2)?.Key</option>
+    <option value=@product.ProductProperties.FirstOrDefault(i => i.Id == 3)?.Key>@product.ProductProperties.FirstOrDefault(i => i.Id == 3)?.Key</option>
+</select>
+<br />
+Product Properties:
+<select @bind="selectedrop"> <!-- связывание с переменной -->
+    <!-- оптимизированный вариант -->
+    @foreach(var prop in product.ProductProperties)
+    {
+        <option value=@prop.Key>@prop.Key</option>
+    }
+</select>
+<br />
 
 @code 
 {
+    private string selectedrop = "";
     // Код отрабатывет до ренднринга интерфейса
     Tangy_Models.LearnBlazorModels.Demo_Product product = new()
     {
         Id = 1,
         Name = "Rose Candle",
         IsActive = true,
-        Price = 10.99
+        Price = 10.99,
+        ProductProperties = new List<Tangy_Models.LearnBlazorModels.Demo_ProductProp>()
+        {
+            new Tangy_Models.LearnBlazorModels.Demo_ProductProp { Id = 1, Key = "Color", Value="Black" },
+            new Tangy_Models.LearnBlazorModels.Demo_ProductProp { Id = 2, Key = "Flavor", Value="Rose Jasmine" },
+            new Tangy_Models.LearnBlazorModels.Demo_ProductProp { Id = 3, Key = "Size", Value="20gr" },
+        }
     };
 }
