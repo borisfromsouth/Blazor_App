@@ -1,0 +1,70 @@
+﻿@page "/learnBlazor/demoProduct"
+
+<h3 class="text-primary">Demo Product</h3>
+
+<div class="row p-2 mt-2 border" style="background-color: #E1F1FF">
+    @foreach (Demo_Product product in Products)
+    {
+        <div class="col-5 p-2 m-2 border bg-light">
+            <h3>Product - @product.Id</h3>
+            Name - @product.Name<br/>
+            Show Properties: <input type="checkbox" @bind=@product.IsActive />
+            @if (product.IsActive)
+            {
+                <p>Flavor - @(product.ProductProperties.FirstOrDefault(i => i.Key == "Flavor")?.Value)</p>
+                <p>Size - @(product.ProductProperties.FirstOrDefault(i => i.Key == "Size")?.Value)</p>
+                <p>Color - @(product.ProductProperties.FirstOrDefault(i => i.Key == "Color")?.Value)</p>
+            }
+            <div>
+                <button type="button" class="btn btn-success" onclick="">Add</button>
+                <button type="button" class="btn btn-danger" onclick="@(() => DeleteProduct(product.Id))">Delete</button>
+            </div>
+        </div>
+    }
+</div>
+    
+    
+
+@code 
+{
+    List<Demo_Product> Products = new();
+
+    protected override void OnInitialized()
+    {
+        //base.OnInitialized();  // Перегрузка инициализации
+
+        Products.Add(new()
+            {
+                Id = 1,
+                Name = "Midnight Blaze",
+                IsActive = false,
+                Price = 3.44,
+                ProductProperties = new List<Demo_ProductProp>()
+                {
+                    new Demo_ProductProp { Id = 1, Key = "Flavor", Value="Rose" },
+                    new Demo_ProductProp { Id = 2, Key = "Size", Value="20gr" },
+                    new Demo_ProductProp { Id = 3, Key = "Color", Value="Purple" },
+                }
+            });
+
+        Products.Add(new()
+            {
+                Id = 2,
+                Name = "Blossom Lily",
+                IsActive = true,
+                Price = 16.01,
+                ProductProperties = new List<Demo_ProductProp>()
+                {
+                    new Demo_ProductProp { Id = 1, Key = "Flavor", Value="Lily" },
+                    new Demo_ProductProp { Id = 2, Key = "Size", Value="18gr" },
+                    new Demo_ProductProp { Id = 3, Key = "Color", Value="White" },
+                }
+            });
+    }
+
+    private void DeleteProduct(int id)
+    {
+        Products.Remove(Products[id - 1]);
+        StateHasChanged();
+    }
+}
