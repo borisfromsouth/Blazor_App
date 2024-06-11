@@ -1,9 +1,62 @@
 ﻿@page "/learnBlazor/bindProp"
 
-<h1>Individual Product</h1>
+<h1 class="text-success">Individual Product</h1>
 <div class="row">
     <div class="col-6 border p-3">
-        <h3 class="text-primary">Product №@product.Id Summary </h3> <hr />
+        <h3 class="text-primary">Product Playground </h3> <hr />
+        <div>
+            Activate <input type="checkbox" @bind="@product.IsActive" /> <!-- Для чекбокса можно без события -->
+            <br />
+        </div>
+        @* <div>
+        Activate №2
+        <input type="checkbox" @bind="@product.IsActive" @bind:event="oninput" />
+        <br />
+        </div>
+        <div>
+        Activate №3
+        <!-- bind использует checked что-то вроде компонента, поэтому используем bind-value -->
+        <input type="checkbox" @bind-value="@product.IsActive" checked="@(product.IsActive ? "checked" : null)" />
+        <br />
+        </div> *@
+
+
+        <!-- Пример двухстороннего биндинга: используем поле для ввода -->
+        <!-- type - тип вводимого значения; bind - связанное значение, свойство может изменятся прямо из интерфейса, изменится после перемещения фокуса с текстбокса-->
+        <!-- bind:event="oninput" задает механизм срабатывания биндинга, в данном случае по вводу: ввели сразу поменялось -->
+        <div>
+            Price: <input type="number" @bind="@product.Price" @bind:event="oninput" />
+            <br />
+        </div>
+
+        <div>
+            Product Properties:
+            <select @bind="selectedrop">
+                <!-- связывание с переменной -->
+                <!-- ручной вариант -->
+                <option value="">Select a property</option>  <!-- дефолтный пункт - затычка -->
+                <option value=@product.ProductProperties.FirstOrDefault(i => i.Id == 1)?.Key>@product.ProductProperties.FirstOrDefault(i => i.Id == 1)?.Key</option>
+                <option value=@product.ProductProperties.FirstOrDefault(i => i.Id == 2)?.Key>@product.ProductProperties.FirstOrDefault(i => i.Id == 2)?.Key</option>
+                <option value=@product.ProductProperties.FirstOrDefault(i => i.Id == 3)?.Key>@product.ProductProperties.FirstOrDefault(i => i.Id == 3)?.Key</option>
+            </select>
+            <br />
+        </div>
+
+       @*  <div>
+            Product Properties:
+            <select @bind="selectedrop">
+                <!-- связывание с переменной -->
+                <!-- оптимизированный вариант -->
+                @foreach (var prop in product.ProductProperties)
+                {
+                    <option value=@prop.Key>@prop.Key</option>
+                }
+            </select>
+            <br />
+        </div> *@
+    </div>
+    <div class="col-6 border p-3">
+        <h3 class="text-primary"> Product №@product.Id Summary </h3><hr />
         Name: @product.Name<br />  <!-- Односторонний биндинг -->
         Active: @product.IsActive<br />
         Price: @product.Price<br />
@@ -16,95 +69,37 @@
             <p>Property Value : @product.ProductProperties.FirstOrDefault(i => i.Key == selectedrop)?.Value</p>
         }
     </div>
-    <br />
 
-    <div class="col-6 border p-3">
-    <h3 class="text-primary">Product Playground </h3> <hr />
-    <div>
-        Activate <input type="checkbox" @bind="@product.IsActive" /> <!-- Для чекбокса можно без события -->
-        <br />
-    </div>
-    @* <div>
-    Activate №2
-    <input type="checkbox" @bind="@product.IsActive" @bind:event="oninput" />
-    <br />
-    </div>
-    <div>
-    Activate №3
-    <!-- bind использует checked что-то вроде компонента, поэтому используем bind-value -->
-    <input type="checkbox" @bind-value="@product.IsActive" checked="@(product.IsActive ? "checked" : null)" />
-    <br />
-    </div> *@
-
-
-    <!-- Пример двухстороннего биндинга: используем поле для ввода -->
-    <!-- type - тип вводимого значения; bind - связанное значение, свойство может изменятся прямо из интерфейса, изменится после перемещения фокуса с текстбокса-->
-    <!-- bind:event="oninput" задает механизм срабатывания биндинга, в данном случае по вводу: ввели сразу поменялось -->
-    <div>
-        Price: <input type="number" @bind="@product.Price" @bind:event="oninput" />
-        <br />
-    </div>
-
-    <div>
-        Product Properties:
-        <select @bind="selectedrop">
-            <!-- связывание с переменной -->
-            <!-- ручной вариант -->
-            <option value="">Select a property</option>  <!-- дефолтный пункт - затычка -->
-            <option value=@product.ProductProperties.FirstOrDefault(i => i.Id == 1)?.Key>@product.ProductProperties.FirstOrDefault(i => i.Id == 1)?.Key</option>
-            <option value=@product.ProductProperties.FirstOrDefault(i => i.Id == 2)?.Key>@product.ProductProperties.FirstOrDefault(i => i.Id == 2)?.Key</option>
-            <option value=@product.ProductProperties.FirstOrDefault(i => i.Id == 3)?.Key>@product.ProductProperties.FirstOrDefault(i => i.Id == 3)?.Key</option>
-        </select>
-        <br />
-    </div>
-
-    <div>
-        Product Properties:
-        <select @bind="selectedrop">
-            <!-- связывание с переменной -->
-            <!-- оптимизированный вариант -->
-            @foreach (var prop in product.ProductProperties)
-            {
-                <option value=@prop.Key>@prop.Key</option>
-            }
-        </select>
-        <br />
-    </div>
-</div>
 </div>
 
-<h2>Product Table</h2>
-<table class="table">
-    <thead>
-        <tr>
-            <th>№</th>
-            <th>Product Name</th>
-            <th>Price</th>
-            <th>Is Active</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (Demo_Product product in Products)
-        {
+<div class="col-12 pt-4"> <!-- pt - падинг (от внешних элементов) -->
+    <h2 class="text-success">Product Table</h2>
+    <table class="table table-striped">
+       @*  <thead>
             <tr>
-                <td>@product.Id</td>
-                <td>@product.Name</td>
-                <td>@product.Price</td>
-                <td><input type="checkbox" @bind="@product.IsActive" /></td>
+                <th>Product Name</th>
+                <th>Price</th>
+                <th>Is Active</th>
             </tr>
-        }
-    </tbody>
-</table>
-<br/>
+        </thead> *@
+        <tbody>
+            @foreach (Demo_Product product in Products)
+            {
+                <tr>
+                    <td> <input type="text" @bind-value=product.Name @bind-value:event="oninput" /></td>@* @product.Name *@
+                    <td> <input type="text" @bind-value=product.Price @bind-value:event="oninput" /></td>@* @product.Price *@
+                    <td><input type="checkbox" @bind-value="@product.IsActive" /></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <br/>
+</div>
 
-<h2>Product Summary</h2>
+<h2 class="text-success">Product Summary</h2>
 @foreach (Demo_Product product in Products)
 {
-    if (product.IsActive)
-    {
-        @(product.Name + " [" + product.Price + "] is " + (product.IsActive ? "IsActive" : "InActive"));
-        <br/>
-    }
+    <p>@(product.Name + " [" + product.Price + "] is " + (product.IsActive ? "IsActive" : "InActive"))</p> <!-- <p> - тег обзац текста -->
 }
 
 @code
