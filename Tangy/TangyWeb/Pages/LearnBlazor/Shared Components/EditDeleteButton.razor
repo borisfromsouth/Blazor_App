@@ -1,0 +1,16 @@
+﻿<!-- Компонент кнопок -->
+
+@if (IsActive)
+{
+    <div>
+        <button type="button" class="btn btn-success" onclick="">Add</button>
+        <button type="button" class="btn btn-danger" onclick="">Delete</button>
+    </div>
+}
+
+
+@code 
+{
+    [Parameter]  // необходимо пометить свойство атрибутом, иначе не будет работать 
+    public bool IsActive { get; set; }
+}

@@ -1,25 +1,13 @@
 ﻿@page "/learnBlazor/demoProduct"
 
 <h3 class="text-primary">Demo Product</h3>
-
+<p>Favorite Total: @SelectedFavoriteCount</p>
+<p>Last Selected Item: @LastSelected</p>
 <div class="row p-2 mt-2 border" style="background-color: #E1F1FF">
     @foreach (Demo_Product product in Products)
     {
-        <div class="col-5 p-2 m-2 border bg-light">
-            <h3>Product - @product.Id</h3>
-            Name - @product.Name<br/>
-            Show Properties: <input type="checkbox" @bind=@product.IsActive />
-            @if (product.IsActive)
-            {
-                <p>Flavor - @(product.ProductProperties.FirstOrDefault(i => i.Key == "Flavor")?.Value)</p>
-                <p>Size - @(product.ProductProperties.FirstOrDefault(i => i.Key == "Size")?.Value)</p>
-                <p>Color - @(product.ProductProperties.FirstOrDefault(i => i.Key == "Color")?.Value)</p>
-            }
-            <div>
-                <button type="button" class="btn btn-success" onclick="">Add</button>
-                <button type="button" class="btn btn-danger" onclick="@(() => DeleteProduct(product.Id))">Delete</button>
-            </div>
-        </div>
+        // Создаем CallBack для получения ответа на нажатие, закидываем в него метод по изменению счетчика
+        <ProductComponent Product="@product" OnFavoriteUpdated="FavoriteCountUpdate" OnLastSelected="LastSelectedUpdate"></ProductComponent>
     }
 </div>
     
@@ -27,6 +15,9 @@
 
 @code 
 {
+    private int SelectedFavoriteCount { get; set; } = 0;
+    private string LastSelected { get; set; }
+
     List<Demo_Product> Products = new();
 
     protected override void OnInitialized()
@@ -66,5 +57,22 @@
     {
         Products.Remove(Products[id - 1]);
         StateHasChanged();
+    }
+
+    private void FavoriteCountUpdate(bool isSelected)
+    {
+        if (isSelected)
+        {
+            SelectedFavoriteCount++;
+        }
+        else
+        {
+            SelectedFavoriteCount--;
+        }
+    }
+
+    private void LastSelectedUpdate(string productName)
+    {
+        LastSelected = productName;
     }
 }

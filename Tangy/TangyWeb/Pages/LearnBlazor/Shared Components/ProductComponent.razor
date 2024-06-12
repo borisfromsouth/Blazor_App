@@ -1,0 +1,40 @@
+﻿<!-- Компонент блока товара -->
+
+<div class="col-5 p-2 m-2 border bg-light" @onclick="(args) => LastSelectedUpdate(args, Product.Name)"> <!-- Чтобы передать что-то сверх обязательных аргументов, передаем в скобочказ все аргументы -->
+    <h3>Product - @Product.Id</h3>
+    <!-- В случае onchange для чекбокса мы получим его значение через базовые аргументы -->
+    <input type="checkbox" @onchange="FavoriteUpdated"/>Add to Favorite <br /> <!-- Активация таска по нажатию -->
+    Name - @Product.Name<br />
+    Show Properties: <input type="checkbox" @bind=@Product.IsActive />
+    @if (Product.IsActive)
+    {
+        <p>Flavor - @(Product.ProductProperties.FirstOrDefault(i => i.Key == "Flavor")?.Value)</p>
+        <p>Size - @(Product.ProductProperties.FirstOrDefault(i => i.Key == "Size")?.Value)</p>
+        <p>Color - @(Product.ProductProperties.FirstOrDefault(i => i.Key == "Color")?.Value)</p>
+    }
+
+    <!-- Вызов компонента из кода -->
+    <EditDeleteButton IsActive="@Product.IsActive"></EditDeleteButton>
+</div>
+
+@code 
+{
+    [Parameter]  // необходимо пометить свойство атрибутом, иначе не будет работать
+    public Demo_Product Product { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> OnFavoriteUpdated { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnLastSelected { get; set; }
+
+    private async Task FavoriteUpdated(ChangeEventArgs e)
+    {
+        await OnFavoriteUpdated.InvokeAsync((bool)e.Value);
+    }
+
+    private async Task LastSelectedUpdate(MouseEventArgs e, string productName)
+    {
+        await OnLastSelected.InvokeAsync(productName);
+    }
+}
