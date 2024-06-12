@@ -12,14 +12,7 @@
         Activate №2
         <input type="checkbox" @bind="@product.IsActive" @bind:event="oninput" />
         <br />
-        </div>
-        <div>
-        Activate №3
-        <!-- bind использует checked что-то вроде компонента, поэтому используем bind-value -->
-        <input type="checkbox" @bind-value="@product.IsActive" checked="@(product.IsActive ? "checked" : null)" />
-        <br />
-        </div> *@
-
+        </div>*@
 
         <!-- Пример двухстороннего биндинга: используем поле для ввода -->
         <!-- type - тип вводимого значения; bind - связанное значение, свойство может изменятся прямо из интерфейса, изменится после перемещения фокуса с текстбокса-->
@@ -75,13 +68,6 @@
 <div class="col-12 pt-4"> <!-- pt - падинг (от внешних элементов) -->
     <h2 class="text-success">Product Table</h2>
     <table class="table table-striped">
-       @*  <thead>
-            <tr>
-                <th>Product Name</th>
-                <th>Price</th>
-                <th>Is Active</th>
-            </tr>
-        </thead> *@
         <tbody>
             @foreach (Demo_Product product in Products)
             {
